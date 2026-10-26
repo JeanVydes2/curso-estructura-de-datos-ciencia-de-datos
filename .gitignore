@@ -1,0 +1,13 @@
+# Salidas de compilación de .NET
+bin/
+obj/
+
+# Herramientas e IDE
+.vs/
+.idea/
+*.user
+*.suo
+
+# Sistema
+.DS_Store
+Thumbs.db
