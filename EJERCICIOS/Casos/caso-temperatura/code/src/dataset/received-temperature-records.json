@@ -1,0 +1,6 @@
+[
+  {"RecordNumber":8100,"ProductCode":"VACC-K","StorageCenter":"Central Warehouse","TemperatureCelsius":4.0,"TransportStage":"Storage"},
+  {"RecordNumber":8200,"ProductCode":"INS-L","StorageCenter":"North Warehouse","TemperatureCelsius":8.5,"TransportStage":"Transport"},
+  {"RecordNumber":8300,"ProductCode":"VACC-M","StorageCenter":"South Warehouse","TemperatureCelsius":-2.0,"TransportStage":"Transport"},
+  {"RecordNumber":4500,"ProductCode":"VACC-DUP","StorageCenter":"Central Warehouse","TemperatureCelsius":4.1,"TransportStage":"Storage"}
+]

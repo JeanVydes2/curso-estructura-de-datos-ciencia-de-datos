@@ -1,0 +1,535 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Control de temperatura en una cadena de frío farmacéutica</title>
+<style>
+:root {
+  --azul-claro: #0183EF;
+  --azul: #005CAB;
+  --azul-base: #004A87;
+  --azul-hondo: #003A6B;
+  --azul-noche: #00294B;
+  --naranja: #FF9400;
+  --naranja-oscuro: #D17900;
+  --texto: #1A1A1A;
+  --texto-2: #555555;
+  --texto-3: #777777;
+  --linea: #D7E3EF;
+  --suave: #F4F8FC;
+
+  --font-body: "Georgia", "Cambria", "Times New Roman", serif;
+  --font-ui: "Segoe UI", Arial, sans-serif;
+  --font-mono: "Consolas", "Menlo", "Courier New", monospace;
+
+  --page-width: 850px;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  background: #E4E9EF;
+}
+
+body {
+  margin: 0;
+  color: var(--texto);
+  background: #fff;
+  font-family: Aptos, "Segoe UI", "Atkinson Hyperlegible", Calibri, system-ui, sans-serif;
+  font-size: 11pt;
+  line-height: 1.6;
+  -webkit-print-color-adjust: exact;
+  print-color-adjust: exact;
+}
+
+/* Hoja tipo documento/PDF centrada sobre el fondo */
+.page-wrap {
+  padding: 2.5rem 1.5rem;
+  background: #E4E9EF;
+}
+
+.page {
+  max-width: var(--page-width);
+  margin: 0 auto;
+  background: #ffffff;
+  box-shadow: 0 2px 6px rgba(0, 41, 75, 0.08), 0 12px 32px rgba(0, 41, 75, 0.12);
+  border-radius: 2px;
+}
+
+.doc-header {
+  border-bottom: 3px solid var(--azul);
+  background: var(--suave);
+  padding: 1.5rem 3rem;
+}
+
+.doc-header .institucion {
+  margin: 0;
+  font-family: var(--font-ui);
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  color: var(--azul-noche);
+  text-transform: uppercase;
+}
+
+.doc-header .curso {
+  margin: 0.3rem 0 0 0;
+  font-family: var(--font-ui);
+  font-size: 1.05rem;
+  font-weight: 600;
+  color: var(--azul);
+}
+
+.doc-content {
+  padding: 2.5rem 3rem 3.5rem 3rem;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-body);
+  color: var(--texto);
+  line-height: 1.3;
+  margin-top: 2rem;
+  margin-bottom: 0.75rem;
+}
+
+h1 {
+  font-size: 1.9rem;
+  color: var(--azul-noche);
+  border-bottom: 2px solid var(--linea);
+  padding-bottom: 0.6rem;
+}
+
+h2 {
+  font-size: 1.4rem;
+  color: var(--azul);
+  border-bottom: 1px solid var(--linea);
+  padding-bottom: 0.3rem;
+}
+
+h3 {
+  font-size: 1.15rem;
+  color: var(--azul-base);
+}
+
+h4 {
+  font-family: var(--font-ui);
+  font-size: 0.9rem;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--texto-2);
+}
+
+p, ul, ol {
+  margin: 0 0 1rem 0;
+  color: var(--texto);
+}
+
+ul, ol {
+  padding-left: 1.5rem;
+}
+
+li {
+  margin-bottom: 0.35rem;
+}
+
+strong {
+  color: var(--texto);
+}
+
+a {
+  color: var(--azul-claro);
+}
+
+blockquote {
+  margin: 1.25rem 0;
+  padding: 0.65rem 1.25rem;
+  border-left: 4px solid var(--naranja);
+  background: var(--suave);
+  color: var(--texto-2);
+}
+
+hr {
+  border: none;
+  border-top: 1px solid var(--linea);
+  margin: 2.25rem 0;
+}
+
+/* Tablas */
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 1.5rem 0;
+  font-size: 0.93rem;
+  font-family: var(--font-ui);
+}
+
+thead th {
+  background: var(--azul-noche);
+  color: #ffffff;
+  font-weight: 600;
+  text-align: left;
+  border: 1px solid var(--azul-noche);
+  padding: 0.6rem 0.85rem;
+}
+
+tbody td {
+  border: 1px solid var(--linea);
+  padding: 0.6rem 0.85rem;
+  vertical-align: top;
+  color: var(--texto);
+}
+
+tbody tr:nth-child(even) {
+  background: var(--suave);
+}
+
+/* Código */
+code {
+  font-family: var(--font-mono);
+  font-size: 0.9em;
+  background: var(--suave);
+  color: var(--azul-hondo);
+  padding: 0.15rem 0.35rem;
+  border-radius: 3px;
+}
+
+pre.code-block {
+  background: var(--azul-noche);
+  border: 1px solid var(--azul-noche);
+  border-radius: 6px;
+  padding: 1.1rem 1.35rem;
+  overflow-x: auto;
+  margin: 1.5rem 0;
+}
+
+pre.code-block code {
+  background: none;
+  color: #e8eef5;
+  padding: 0;
+  font-size: 0.88rem;
+  line-height: 1.55;
+}
+
+img {
+  max-width: 100%;
+}
+
+/* Respuestas ocultas tras un botón "Ver respuesta(s)" (scripts/answers.js) */
+details.respuestas,
+details.respuesta {
+  margin: 0.6rem 0 1.2rem;
+}
+
+.respuesta-etiquetada details.respuesta,
+li details.respuesta {
+  display: inline;
+  margin: 0;
+}
+
+details.respuestas > summary,
+details.respuesta > summary {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  cursor: pointer;
+  list-style: none;
+  font-family: var(--font-ui);
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--azul);
+  background: var(--suave);
+  border: 1px solid var(--linea);
+  border-radius: 999px;
+  padding: 0.2rem 0.85rem;
+  user-select: none;
+}
+
+details.respuestas > summary::-webkit-details-marker,
+details.respuesta > summary::-webkit-details-marker {
+  display: none;
+}
+
+details.respuestas > summary::before,
+details.respuesta > summary::before {
+  content: "▸";
+  transition: transform 0.15s ease;
+}
+
+details[open] > summary::before {
+  transform: rotate(90deg);
+}
+
+details.respuestas > summary:hover,
+details.respuesta > summary:hover {
+  background: #e3eef9;
+  border-color: var(--azul-claro);
+}
+
+details.respuestas > summary:focus-visible,
+details.respuesta > summary:focus-visible {
+  outline: 2px solid var(--azul-claro);
+  outline-offset: 2px;
+}
+
+details[open] > summary {
+  margin-bottom: 0.6rem;
+}
+
+summary .ocultar,
+details[open] > summary .ver {
+  display: none;
+}
+
+details[open] > summary .ocultar {
+  display: inline;
+}
+
+.respuesta-cuerpo {
+  border-left: 3px solid var(--naranja);
+  background: #fffaf2;
+  padding: 0.6rem 1rem;
+  border-radius: 0 6px 6px 0;
+}
+
+.respuesta-cuerpo > :first-child {
+  margin-top: 0;
+}
+
+.respuesta-cuerpo > :last-child {
+  margin-bottom: 0;
+}
+
+details.respuesta[open] {
+  display: block;
+  margin-top: 0.3rem;
+}
+
+/* Diagramas SVG generados desde dibujos de texto (scripts/diagrams.js) */
+figure.diagrama {
+  margin: 1.5rem 0;
+  padding: 1rem;
+  background: var(--suave);
+  border: 1px solid var(--linea);
+  border-radius: 10px;
+  break-inside: avoid;
+  page-break-inside: avoid;
+}
+
+figure.diagrama svg {
+  display: block;
+  width: 100%;
+  height: auto;
+  margin: 0 auto;
+}
+
+/* Vista de impresión / PDF: la hoja pasa a ocupar la página real */
+@media print {
+  @page {
+    margin: 1.5cm;
+  }
+  html, body {
+    background: #ffffff;
+  }
+  .page-wrap {
+    padding: 0;
+    background: #ffffff;
+  }
+  .page {
+    box-shadow: none;
+    max-width: none;
+  }
+  .doc-header {
+    background: none;
+    padding: 0 0 0.85rem 0;
+  }
+  .doc-content {
+    padding: 1.5rem 0 0 0;
+  }
+  a {
+    color: var(--texto);
+    text-decoration: none;
+  }
+  pre.code-block {
+    border: 1px solid var(--linea);
+    background: var(--suave);
+  }
+  pre.code-block code {
+    color: var(--texto);
+  }
+}
+
+/* highlight.js - tema oscuro sobre azul-noche (coherente con paleta institucional) */
+.hljs { color: #e8eef5; background: transparent; }
+.hljs-comment, .hljs-quote { color: #8fa6bf; font-style: italic; }
+.hljs-keyword, .hljs-selector-tag, .hljs-literal, .hljs-type { color: #6cc0ff; font-weight: 600; }
+.hljs-string, .hljs-attr, .hljs-symbol, .hljs-bullet, .hljs-addition { color: #ffb454; }
+.hljs-number, .hljs-title, .hljs-section, .hljs-name { color: #7fd6c2; }
+.hljs-variable, .hljs-template-variable, .hljs-attribute { color: #ffd479; }
+.hljs-built_in, .hljs-class .hljs-title { color: #c9a8ff; }
+.hljs-deletion { color: #ff8a8a; }
+
+</style>
+</head>
+<body>
+<div class="page-wrap">
+  <div class="page">
+    <header class="doc-header">
+      <p class="institucion">Universidad del Magdalena · Facultad de Ingeniería</p>
+      <p class="curso">Estructuras de Datos</p>
+    </header>
+    <main class="doc-content">
+<h1>Control de temperatura en una cadena de frío farmacéutica</h1>
+<h2>Actor y contexto</h2>
+<p>Usted trabaja como ingeniero de datos en <strong>PharmaLogix</strong>, una empresa que almacena y transporta vacunas, insulinas, reactivos de laboratorio y otros productos farmacéuticos que deben conservarse dentro de rangos de temperatura controlados. La operación incluye un centro principal de distribución, bodegas regionales y vehículos refrigerados que entregan los productos a hospitales y farmacias.</p>
+<p>Cada cámara y vehículo cuenta con sensores que envían lecturas periódicas. Una lectura representa la temperatura observada en un momento de la operación y recibe un identificador único. El sistema debe conservar el producto, el centro donde se registró la lectura, la etapa logística y la temperatura medida para que el equipo de calidad pueda reconstruir la historia de un lote.</p>
+<p>El equipo de logística consulta una lectura específica cuando una alarma se activa, mientras que el equipo de calidad revisa conjuntos de registros durante las auditorías. El supervisor necesita distinguir entre una temperatura normal, una lectura cercana al límite y una desviación crítica que podría obligar a inmovilizar un lote. Una lectura duplicada no debe incorporarse porque podría alterar la trazabilidad del lote y generar dos versiones del mismo evento.</p>
+<p>El sistema mantiene un histórico en memoria y recibe nuevas lecturas al inicio de cada jornada desde los dispositivos de monitoreo. La aplicación debe responder con rapidez a las consultas del personal de operaciones y producir recorridos ordenados para los reportes de calidad. El índice se construirá con un árbol binario de búsqueda usando <code>RecordNumber</code> como clave.</p>
+<p>Las lecturas nuevas no llegan con una condición calculada. El proceso debe interpretar la temperatura, asignar la condición correspondiente y conservarla junto con el registro antes de insertarlo. Cuando el identificador ya existe, debe mantenerse la lectura histórica y registrarse el rechazo de la nueva lectura.</p>
+<p>El resultado será utilizado para decidir si una lectura puede continuar en el flujo logístico, si debe ser revisada por calidad o si requiere una acción inmediata sobre el producto. Las lecturas pueden originarse en una cámara de almacenamiento o durante el transporte. Por esta razón, cada registro debe conservar su identificador, producto, centro, temperatura y etapa logística, y el árbol debe mantener su estructura después de procesar las nuevas lecturas.</p>
+<h2>Datos entregados</h2>
+<p>En la carpeta <code>dataset</code> encontrará <code>cold-chain-history.json</code> y <code>received-temperature-records.json</code>.</p>
+<h3><code>cold-chain-history.json</code></h3>
+<table>
+<thead>
+<tr>
+<th>Campo</th>
+<th>Tipo C#</th>
+<th>Descripción</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>RecordNumber</code></td>
+<td><code>int</code></td>
+<td>Identificador único y clave del árbol.</td>
+</tr>
+<tr>
+<td><code>ProductCode</code></td>
+<td><code>string</code></td>
+<td>Código del producto farmacéutico.</td>
+</tr>
+<tr>
+<td><code>StorageCenter</code></td>
+<td><code>string</code></td>
+<td>Centro donde se registró la lectura.</td>
+</tr>
+<tr>
+<td><code>TemperatureCelsius</code></td>
+<td><code>decimal</code></td>
+<td>Temperatura registrada en grados Celsius.</td>
+</tr>
+<tr>
+<td><code>TransportStage</code></td>
+<td><code>string</code></td>
+<td>Etapa: <code>Storage</code> o <code>Transport</code>.</td>
+</tr>
+<tr>
+<td><code>Condition</code></td>
+<td><code>string</code></td>
+<td>Clasificación calculada para la lectura.</td>
+</tr>
+</tbody></table>
+<h3><code>received-temperature-records.json</code></h3>
+<table>
+<thead>
+<tr>
+<th>Campo</th>
+<th>Tipo C#</th>
+<th>Descripción</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>RecordNumber</code></td>
+<td><code>int</code></td>
+<td>Identificador de la nueva lectura.</td>
+</tr>
+<tr>
+<td><code>ProductCode</code></td>
+<td><code>string</code></td>
+<td>Código del producto.</td>
+</tr>
+<tr>
+<td><code>StorageCenter</code></td>
+<td><code>string</code></td>
+<td>Centro que reporta la lectura.</td>
+</tr>
+<tr>
+<td><code>TemperatureCelsius</code></td>
+<td><code>decimal</code></td>
+<td>Nueva temperatura registrada.</td>
+</tr>
+<tr>
+<td><code>TransportStage</code></td>
+<td><code>string</code></td>
+<td>Etapa en la que se tomó la lectura.</td>
+</tr>
+</tbody></table>
+<h2>Reglas de procesamiento</h2>
+<p><code>Condition</code> se calcula a partir de <code>TemperatureCelsius</code> y no debe leerse de las nuevas lecturas:</p>
+<ol>
+<li>Si la temperatura es menor que <code>0</code> o mayor que <code>8</code>, la condición es <code>Critical</code>.</li>
+<li>Si no se cumple la regla anterior y la temperatura es menor que <code>2</code> o mayor que <code>6</code>, la condición es <code>Review</code>.</li>
+<li>En cualquier otro caso, la condición es <code>Normal</code>.</li>
+</ol>
+<p>El sistema debe calcular <code>Condition</code> antes de insertar cada registro. Si una lectura nueva tiene un <code>RecordNumber</code> que ya existe, se rechaza y el árbol conserva el registro original.</p>
+<h2>Reto</h2>
+<p>Construya una aplicación de consola que:</p>
+<ol>
+<li>Cargue los dos archivos JSON mediante el servicio de carga de datos.</li>
+<li>Construya el árbol con las lecturas históricas usando <code>RecordNumber</code> como clave.</li>
+<li>Antes de procesar las lecturas nuevas, muestre cantidad, altura, hojas, nodos internos y los cuatro recorridos.</li>
+<li>Busque la lectura <code>4500</code> y la lectura inexistente <code>9999</code>, mostrando el resultado y el camino recorrido.</li>
+<li>Calcule y guarde <code>Condition</code> con las reglas indicadas.</li>
+<li>Procese las lecturas nuevas: incorpore las que tengan un identificador no registrado y descarte las que ya existan.</li>
+<li>Muestre las lecturas insertadas y rechazadas con su condición calculada.</li>
+<li>Muestre nuevamente las métricas y recorridos después de las inserciones.</li>
+<li>Verifique que el árbol conserve su propiedad de búsqueda.</li>
+</ol>
+<h2>Preguntas de análisis</h2>
+<ol>
+<li>¿Por qué <code>RecordNumber</code> es una clave adecuada para organizar las lecturas?</li>
+<li>¿Qué riesgo de trazabilidad existe si se acepta una lectura duplicada?</li>
+<li>¿Por qué una lectura fuera del rango debe clasificarse como <code>Critical</code>?</li>
+<li>¿Qué diferencia existe entre <code>Review</code> y <code>Critical</code> según las reglas?</li>
+<li>¿Qué información permite observar el recorrido por niveles?</li>
+<li>¿Qué cambios pueden producir las nuevas inserciones en la altura y los recorridos?</li>
+</ol>
+<h2>Salida esperada</h2>
+<p>La salida debe mostrar, antes y después de procesar las nuevas lecturas:</p>
+<pre class="code-block"><code class="hljs language-text">Initial metrics:
+Records in tree: &lt;cantidad&gt;
+height: &lt;altura&gt;
+leaves: &lt;hojas&gt;
+internal nodes: &lt;cantidad&gt;
+Inorder: &lt;claves&gt;
+Preorder: &lt;claves&gt;
+Postorder: &lt;claves&gt;
+Level order: &lt;claves&gt;
+valid: True
+Search 4500: found
+Path 4500: &lt;camino&gt;
+Search 9999: not found
+Path 9999: &lt;camino&gt;
+Received temperature records:
+&lt;RecordNumber&gt;: condition=&lt;condition&gt;, inserted
+&lt;RecordNumber&gt;: condition=&lt;condition&gt;, rejected because of duplicate
+Metrics after inserting received records:
+Records in tree: &lt;cantidad final&gt;
+height: &lt;altura final&gt;
+leaves: &lt;hojas finales&gt;
+internal nodes: &lt;cantidad final&gt;
+Inorder: &lt;claves finales&gt;
+Preorder: &lt;claves finales&gt;
+Postorder: &lt;claves finales&gt;
+Level order: &lt;claves finales&gt;
+valid: True</code></pre>
+<h2>Entrega</h2>
+<p>Entregue un <code>.zip</code> con el proyecto completo, los dos archivos JSON, las pruebas y las respuestas de análisis. El proyecto debe funcionar con <code>dotnet build</code>, <code>dotnet test</code> y <code>dotnet run</code> desde una carpeta independiente.</p>
+
+    </main>
+  </div>
+</div>
+</body>
+</html>

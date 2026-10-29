@@ -1,0 +1,12 @@
+[
+  {"RecordNumber":4500,"ProductCode":"VACC-A","StorageCenter":"Central Warehouse","TemperatureCelsius":4.2,"TransportStage":"Storage","Condition":"Normal"},
+  {"RecordNumber":2300,"ProductCode":"INS-B","StorageCenter":"North Warehouse","TemperatureCelsius":7.1,"TransportStage":"Transport","Condition":"Review"},
+  {"RecordNumber":6700,"ProductCode":"VACC-C","StorageCenter":"South Warehouse","TemperatureCelsius":2.8,"TransportStage":"Storage","Condition":"Normal"},
+  {"RecordNumber":1200,"ProductCode":"INS-D","StorageCenter":"Central Warehouse","TemperatureCelsius":9.5,"TransportStage":"Transport","Condition":"Critical"},
+  {"RecordNumber":3100,"ProductCode":"VACC-E","StorageCenter":"North Warehouse","TemperatureCelsius":5.0,"TransportStage":"Storage","Condition":"Normal"},
+  {"RecordNumber":5400,"ProductCode":"INS-F","StorageCenter":"South Warehouse","TemperatureCelsius":-1.5,"TransportStage":"Transport","Condition":"Critical"},
+  {"RecordNumber":800,"ProductCode":"VACC-G","StorageCenter":"Central Warehouse","TemperatureCelsius":3.8,"TransportStage":"Storage","Condition":"Normal"},
+  {"RecordNumber":5800,"ProductCode":"INS-H","StorageCenter":"South Warehouse","TemperatureCelsius":8.2,"TransportStage":"Transport","Condition":"Review"},
+  {"RecordNumber":7600,"ProductCode":"VACC-I","StorageCenter":"East Warehouse","TemperatureCelsius":4.8,"TransportStage":"Storage","Condition":"Normal"},
+  {"RecordNumber":1500,"ProductCode":"INS-J","StorageCenter":"North Warehouse","TemperatureCelsius":6.5,"TransportStage":"Transport","Condition":"Review"}
+]
