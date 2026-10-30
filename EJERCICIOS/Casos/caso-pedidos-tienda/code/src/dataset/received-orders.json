@@ -1,0 +1,6 @@
+[
+  {"OrderId":8100,"ProductCode":"ELEC-K","StoreCode":"Central Store","Stage":"Processing"},
+  {"OrderId":8200,"ProductCode":"ROPA-L","StoreCode":"North Store","Stage":"Shipping"},
+  {"OrderId":8300,"ProductCode":"HOGAR-M","StoreCode":"South Store","Stage":"Processing"},
+  {"OrderId":4500,"ProductCode":"ELEC-DUP","StoreCode":"Central Store","Stage":"Processing"}
+]

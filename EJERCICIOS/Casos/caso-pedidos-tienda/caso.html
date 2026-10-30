@@ -1,0 +1,534 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Control de pedidos en una tienda por departamentos</title>
+<style>
+:root {
+  --azul-claro: #0183EF;
+  --azul: #005CAB;
+  --azul-base: #004A87;
+  --azul-hondo: #003A6B;
+  --azul-noche: #00294B;
+  --naranja: #FF9400;
+  --naranja-oscuro: #D17900;
+  --texto: #1A1A1A;
+  --texto-2: #555555;
+  --texto-3: #777777;
+  --linea: #D7E3EF;
+  --suave: #F4F8FC;
+
+  --font-body: "Georgia", "Cambria", "Times New Roman", serif;
+  --font-ui: "Segoe UI", Arial, sans-serif;
+  --font-mono: "Consolas", "Menlo", "Courier New", monospace;
+
+  --page-width: 850px;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  background: #E4E9EF;
+}
+
+body {
+  margin: 0;
+  color: var(--texto);
+  background: #fff;
+  font-family: Aptos, "Segoe UI", "Atkinson Hyperlegible", Calibri, system-ui, sans-serif;
+  font-size: 11pt;
+  line-height: 1.6;
+  -webkit-print-color-adjust: exact;
+  print-color-adjust: exact;
+}
+
+/* Hoja tipo documento/PDF centrada sobre el fondo */
+.page-wrap {
+  padding: 2.5rem 1.5rem;
+  background: #E4E9EF;
+}
+
+.page {
+  max-width: var(--page-width);
+  margin: 0 auto;
+  background: #ffffff;
+  box-shadow: 0 2px 6px rgba(0, 41, 75, 0.08), 0 12px 32px rgba(0, 41, 75, 0.12);
+  border-radius: 2px;
+}
+
+.doc-header {
+  border-bottom: 3px solid var(--azul);
+  background: var(--suave);
+  padding: 1.5rem 3rem;
+}
+
+.doc-header .institucion {
+  margin: 0;
+  font-family: var(--font-ui);
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  color: var(--azul-noche);
+  text-transform: uppercase;
+}
+
+.doc-header .curso {
+  margin: 0.3rem 0 0 0;
+  font-family: var(--font-ui);
+  font-size: 1.05rem;
+  font-weight: 600;
+  color: var(--azul);
+}
+
+.doc-content {
+  padding: 2.5rem 3rem 3.5rem 3rem;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-body);
+  color: var(--texto);
+  line-height: 1.3;
+  margin-top: 2rem;
+  margin-bottom: 0.75rem;
+}
+
+h1 {
+  font-size: 1.9rem;
+  color: var(--azul-noche);
+  border-bottom: 2px solid var(--linea);
+  padding-bottom: 0.6rem;
+}
+
+h2 {
+  font-size: 1.4rem;
+  color: var(--azul);
+  border-bottom: 1px solid var(--linea);
+  padding-bottom: 0.3rem;
+}
+
+h3 {
+  font-size: 1.15rem;
+  color: var(--azul-base);
+}
+
+h4 {
+  font-family: var(--font-ui);
+  font-size: 0.9rem;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--texto-2);
+}
+
+p, ul, ol {
+  margin: 0 0 1rem 0;
+  color: var(--texto);
+}
+
+ul, ol {
+  padding-left: 1.5rem;
+}
+
+li {
+  margin-bottom: 0.35rem;
+}
+
+strong {
+  color: var(--texto);
+}
+
+a {
+  color: var(--azul-claro);
+}
+
+blockquote {
+  margin: 1.25rem 0;
+  padding: 0.65rem 1.25rem;
+  border-left: 4px solid var(--naranja);
+  background: var(--suave);
+  color: var(--texto-2);
+}
+
+hr {
+  border: none;
+  border-top: 1px solid var(--linea);
+  margin: 2.25rem 0;
+}
+
+/* Tablas */
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 1.5rem 0;
+  font-size: 0.93rem;
+  font-family: var(--font-ui);
+}
+
+thead th {
+  background: var(--azul-noche);
+  color: #ffffff;
+  font-weight: 600;
+  text-align: left;
+  border: 1px solid var(--azul-noche);
+  padding: 0.6rem 0.85rem;
+}
+
+tbody td {
+  border: 1px solid var(--linea);
+  padding: 0.6rem 0.85rem;
+  vertical-align: top;
+  color: var(--texto);
+}
+
+tbody tr:nth-child(even) {
+  background: var(--suave);
+}
+
+/* Código */
+code {
+  font-family: var(--font-mono);
+  font-size: 0.9em;
+  background: var(--suave);
+  color: var(--azul-hondo);
+  padding: 0.15rem 0.35rem;
+  border-radius: 3px;
+}
+
+pre.code-block {
+  background: var(--azul-noche);
+  border: 1px solid var(--azul-noche);
+  border-radius: 6px;
+  padding: 1.1rem 1.35rem;
+  overflow-x: auto;
+  margin: 1.5rem 0;
+}
+
+pre.code-block code {
+  background: none;
+  color: #e8eef5;
+  padding: 0;
+  font-size: 0.88rem;
+  line-height: 1.55;
+}
+
+img {
+  max-width: 100%;
+}
+
+/* Respuestas ocultas tras un botón "Ver respuesta(s)" (scripts/answers.js) */
+details.respuestas,
+details.respuesta {
+  margin: 0.6rem 0 1.2rem;
+}
+
+.respuesta-etiquetada details.respuesta,
+li details.respuesta {
+  display: inline;
+  margin: 0;
+}
+
+details.respuestas > summary,
+details.respuesta > summary {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  cursor: pointer;
+  list-style: none;
+  font-family: var(--font-ui);
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--azul);
+  background: var(--suave);
+  border: 1px solid var(--linea);
+  border-radius: 999px;
+  padding: 0.2rem 0.85rem;
+  user-select: none;
+}
+
+details.respuestas > summary::-webkit-details-marker,
+details.respuesta > summary::-webkit-details-marker {
+  display: none;
+}
+
+details.respuestas > summary::before,
+details.respuesta > summary::before {
+  content: "▸";
+  transition: transform 0.15s ease;
+}
+
+details[open] > summary::before {
+  transform: rotate(90deg);
+}
+
+details.respuestas > summary:hover,
+details.respuesta > summary:hover {
+  background: #e3eef9;
+  border-color: var(--azul-claro);
+}
+
+details.respuestas > summary:focus-visible,
+details.respuesta > summary:focus-visible {
+  outline: 2px solid var(--azul-claro);
+  outline-offset: 2px;
+}
+
+details[open] > summary {
+  margin-bottom: 0.6rem;
+}
+
+summary .ocultar,
+details[open] > summary .ver {
+  display: none;
+}
+
+details[open] > summary .ocultar {
+  display: inline;
+}
+
+.respuesta-cuerpo {
+  border-left: 3px solid var(--naranja);
+  background: #fffaf2;
+  padding: 0.6rem 1rem;
+  border-radius: 0 6px 6px 0;
+}
+
+.respuesta-cuerpo > :first-child {
+  margin-top: 0;
+}
+
+.respuesta-cuerpo > :last-child {
+  margin-bottom: 0;
+}
+
+details.respuesta[open] {
+  display: block;
+  margin-top: 0.3rem;
+}
+
+/* Diagramas SVG generados desde dibujos de texto (scripts/diagrams.js) */
+figure.diagrama {
+  margin: 1.5rem 0;
+  padding: 1rem;
+  background: var(--suave);
+  border: 1px solid var(--linea);
+  border-radius: 10px;
+  break-inside: avoid;
+  page-break-inside: avoid;
+}
+
+figure.diagrama svg {
+  display: block;
+  width: 100%;
+  height: auto;
+  margin: 0 auto;
+}
+
+/* Vista de impresión / PDF: la hoja pasa a ocupar la página real */
+@media print {
+  @page {
+    margin: 1.5cm;
+  }
+  html, body {
+    background: #ffffff;
+  }
+  .page-wrap {
+    padding: 0;
+    background: #ffffff;
+  }
+  .page {
+    box-shadow: none;
+    max-width: none;
+  }
+  .doc-header {
+    background: none;
+    padding: 0 0 0.85rem 0;
+  }
+  .doc-content {
+    padding: 1.5rem 0 0 0;
+  }
+  a {
+    color: var(--texto);
+    text-decoration: none;
+  }
+  pre.code-block {
+    border: 1px solid var(--linea);
+    background: var(--suave);
+  }
+  pre.code-block code {
+    color: var(--texto);
+  }
+}
+
+/* highlight.js - tema oscuro sobre azul-noche (coherente con paleta institucional) */
+.hljs { color: #e8eef5; background: transparent; }
+.hljs-comment, .hljs-quote { color: #8fa6bf; font-style: italic; }
+.hljs-keyword, .hljs-selector-tag, .hljs-literal, .hljs-type { color: #6cc0ff; font-weight: 600; }
+.hljs-string, .hljs-attr, .hljs-symbol, .hljs-bullet, .hljs-addition { color: #ffb454; }
+.hljs-number, .hljs-title, .hljs-section, .hljs-name { color: #7fd6c2; }
+.hljs-variable, .hljs-template-variable, .hljs-attribute { color: #ffd479; }
+.hljs-built_in, .hljs-class .hljs-title { color: #c9a8ff; }
+.hljs-deletion { color: #ff8a8a; }
+
+</style>
+</head>
+<body>
+<div class="page-wrap">
+  <div class="page">
+    <header class="doc-header">
+      <p class="institucion">Universidad del Magdalena · Facultad de Ingeniería</p>
+      <p class="curso">Estructuras de Datos</p>
+    </header>
+    <main class="doc-content">
+<h1>Control de pedidos en una tienda por departamentos</h1>
+<h2>Actor y contexto</h2>
+<p>Usted trabaja como ingeniero de datos en <strong>Mercalínea</strong>, una cadena de tiendas por departamentos que vende electrónica, ropa y artículos para el hogar. La operación incluye una tienda central, sucursales regionales y un centro de distribución que prepara y despacha los pedidos de los clientes.</p>
+<p>Cada sucursal registra pedidos en el sistema. Un pedido es la solicitud de compra de un cliente y recibe un número de pedido único. El sistema debe conservar el producto, la sucursal que procesa el pedido, los días de entrega estimados, los días de entrega reales y la etapa de preparación para que el equipo comercial pueda reconstruir la historia de cada solicitud.</p>
+<p>El equipo de operaciones consulta un pedido específico —por su número o por el código del producto— cuando un cliente presenta un reclamo, mientras que el equipo comercial revisa conjuntos de pedidos durante los cierres de mes. El supervisor necesita distinguir entre un pedido que llega dentro de los días estimados, un pedido que se está demorando y un pedido que ya superó lo prometido y podría obligar a renegociar la entrega con el cliente. Un pedido duplicado no debe incorporarse porque podría alterar la trazabilidad de la venta y generar dos versiones de la misma solicitud.</p>
+<p>El sistema mantiene un histórico en memoria y recibe nuevos pedidos al inicio de cada jornada desde las cajas y el canal en línea. La aplicación debe responder con rapidez a las consultas del personal de operaciones y producir recorridos ordenados para los reportes del equipo comercial. El índice principal se construirá con un árbol binario de búsqueda usando <code>OrderId</code> como clave y, para los pedidos nuevos, se construirá otro índice usando <code>ProductCode</code> como clave.</p>
+<p>Los pedidos nuevos no llegan con la etapa final calculada ni con sus días de entrega. El proceso debe completar esos datos, comparar los días de entrega reales con los estimados, asignar la etapa correspondiente y conservarla junto con el registro antes de insertarlo. Cuando el número de pedido ya existe, debe mantenerse el pedido histórico y registrarse el rechazo del nuevo pedido.</p>
+<p>El resultado será utilizado para decidir si un pedido puede continuar en el flujo de preparación, si debe ser revisado por el equipo comercial o si requiere una acción inmediata con el cliente. Los pedidos se preparan en la sucursal o se despachan desde el centro de distribución. Por esta razón, cada registro debe conservar su número, producto, sucursal, días estimados, días reales y etapa, y el árbol debe mantener su estructura después de procesar los nuevos pedidos.</p>
+<h2>Datos entregados</h2>
+<p>En la carpeta <code>dataset</code> encontrará <code>order-history.json</code> y <code>received-orders.json</code>.</p>
+<h3><code>order-history.json</code></h3>
+<table>
+<thead>
+<tr>
+<th>Campo</th>
+<th>Tipo C#</th>
+<th>Descripción</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>OrderId</code></td>
+<td><code>int</code></td>
+<td>Número de pedido: identificador único y clave del árbol.</td>
+</tr>
+<tr>
+<td><code>ProductCode</code></td>
+<td><code>string</code></td>
+<td>Código del producto pedido.</td>
+</tr>
+<tr>
+<td><code>StoreCode</code></td>
+<td><code>string</code></td>
+<td>Sucursal que procesa el pedido.</td>
+</tr>
+<tr>
+<td><code>EstimatedDeliveryDays</code></td>
+<td><code>int</code></td>
+<td>Días de entrega estimados al momento de crear el pedido.</td>
+</tr>
+<tr>
+<td><code>DeliveringDays</code></td>
+<td><code>int</code></td>
+<td>Días que lleva (o llevó) la entrega real del pedido.</td>
+</tr>
+<tr>
+<td><code>Stage</code></td>
+<td><code>string</code></td>
+<td>Etapa: <code>Processing</code> o <code>Shipping</code>. La regla de procesamiento la cambia a <code>Delayed</code>.</td>
+</tr>
+</tbody></table>
+<h3><code>received-orders.json</code></h3>
+<table>
+<thead>
+<tr>
+<th>Campo</th>
+<th>Tipo C#</th>
+<th>Descripción</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>OrderId</code></td>
+<td><code>int</code></td>
+<td>Número del nuevo pedido.</td>
+</tr>
+<tr>
+<td><code>ProductCode</code></td>
+<td><code>string</code></td>
+<td>Código del producto.</td>
+</tr>
+<tr>
+<td><code>StoreCode</code></td>
+<td><code>string</code></td>
+<td>Sucursal que reporta el pedido.</td>
+</tr>
+<tr>
+<td><code>Stage</code></td>
+<td><code>string</code></td>
+<td>Etapa en la que se registró el pedido.</td>
+</tr>
+</tbody></table>
+<p>Los pedidos nuevos <strong>no incluyen</strong> <code>EstimatedDeliveryDays</code> ni <code>DeliveringDays</code>: esos valores se asignan durante el procesamiento, antes de insertar el pedido en el árbol.</p>
+<h2>Reglas de procesamiento</h2>
+<p><code>Stage</code> no debe leerse tal cual viene en los archivos: el estado final del pedido se determina comparando <code>DeliveringDays</code> con <code>EstimatedDeliveryDays</code>:</p>
+<ol>
+<li>Si <code>DeliveringDays</code> es mayor que <code>EstimatedDeliveryDays</code>, la etapa es <code>Delayed</code>.</li>
+<li>En cualquier otro caso, se conserva la etapa informada: <code>Processing</code> o <code>Shipping</code>.</li>
+</ol>
+<p>El sistema debe aplicar esta regla a cada pedido nuevo antes de insertarlo y, al final, recorrer el árbol completo para aplicarla también a los pedidos históricos. Si un pedido nuevo tiene un <code>OrderId</code> que ya existe, se rechaza y el árbol conserva el pedido original.</p>
+<h2>Reto</h2>
+<p>Construya una aplicación de consola que:</p>
+<ol>
+<li>Cargue los dos archivos JSON mediante el servicio de carga de datos.</li>
+<li>Construya el árbol con los pedidos históricos usando <code>OrderId</code> como clave.</li>
+<li>Antes de procesar los pedidos nuevos, muestre cantidad, altura, hojas, nodos internos y los cuatro recorridos.</li>
+<li>Construya un índice con los pedidos nuevos usando <code>ProductCode</code> como clave y busque el producto <code>HOGAR-M</code> y el producto inexistente <code>ELEC-Z</code>, mostrando el resultado y el camino recorrido.</li>
+<li>Antes de insertar cada pedido nuevo, complete sus datos de entrega y aplique la regla de etapa: si <code>DeliveringDays</code> es mayor que <code>EstimatedDeliveryDays</code>, la etapa es <code>Delayed</code>; si no, conserve la etapa informada.</li>
+<li>Procese los pedidos nuevos: incorpore los que tengan un número de pedido no registrado y descarte los que ya existan.</li>
+<li>Muestre los pedidos insertados y rechazados con su etapa resultante.</li>
+<li>Muestre nuevamente las métricas y recorridos después de las inserciones.</li>
+<li>Verifique que el árbol conserve su propiedad de búsqueda.</li>
+<li><strong>Actualice los pedidos dentro del árbol</strong>: recorra el árbol completo y, para cada pedido cuyo <code>DeliveringDays</code> sea mayor que su <code>EstimatedDeliveryDays</code>, acceda a su nodo y cambie <code>Stage</code> a <code>Delayed</code> sin reconstruir el árbol. Muestre todos los pedidos que quedaron con etapa <code>Delayed</code> y compruebe que el árbol sigue siendo válido.</li>
+</ol>
+<h2>Preguntas de análisis</h2>
+<ol>
+<li>¿Qué recorrido permite listar los pedidos en orden creciente de <code>OrderId</code> y por qué produce ese orden?</li>
+<li>Si los pedidos históricos se insertaran ya ordenados de menor a mayor, ¿cómo quedaría el árbol y qué consecuencia tendría sobre la altura y las búsquedas?</li>
+<li>Al cambiar el <code>Stage</code> de un nodo ya insertado, ¿por qué se conserva la propiedad de búsqueda? ¿Qué pasaría si en lugar de eso se cambiara el <code>OrderId</code>?</li>
+<li>Aunque no encuentra el producto <code>ELEC-Z</code>, ¿qué información deja el camino de búsqueda sobre la distribución del índice de productos?</li>
+<li>¿Por qué un pedido duplicado debe rechazarse en lugar de sobrescribir el pedido histórico con los datos nuevos?</li>
+<li>Para aplicar la regla <code>DeliveringDays &gt; EstimatedDeliveryDays</code> a todos los pedidos, ¿qué recorrido conviene usar y cuál es su complejidad en tiempo?</li>
+</ol>
+<h2>Salida esperada</h2>
+<p>La salida debe mostrar, antes y después de procesar los nuevos pedidos, y al final el listado de pedidos actualizados:</p>
+<pre class="code-block"><code class="hljs language-text">Initial metrics:
+Records in tree: &lt;cantidad&gt;
+height: &lt;altura&gt;
+leaves: &lt;hojas&gt;
+internal nodes: &lt;cantidad&gt;
+Inorder: &lt;claves&gt;
+Preorder: &lt;claves&gt;
+Postorder: &lt;claves&gt;
+Level order: &lt;claves&gt;
+valid: True
+Search HOGAR-M: found
+Path HOGAR-M: &lt;camino&gt;
+Search ELEC-Z: not found
+Path ELEC-Z: &lt;camino&gt;
+Received orders:
+&lt;OrderId&gt;: stage=&lt;stage&gt;, inserted
+&lt;OrderId&gt;: stage=&lt;stage&gt;, rejected because of duplicate
+Metrics after inserting received orders:
+Records in tree: &lt;cantidad final&gt;
+height: &lt;altura final&gt;
+leaves: &lt;hojas finales&gt;
+internal nodes: &lt;cantidad final&gt;
+Inorder: &lt;claves finales&gt;
+Preorder: &lt;claves finales&gt;
+Postorder: &lt;claves finales&gt;
+Level order: &lt;claves finales&gt;
+valid: True
+Delayed orders (DeliveringDays &gt; EstimatedDeliveryDays):
+&lt;OrderId&gt;: stage=Delayed
+valid: True</code></pre>
+<h2>Entrega</h2>
+<p>Entregue un <code>.zip</code> con el proyecto completo, los dos archivos JSON, las pruebas y las respuestas de análisis. El proyecto debe funcionar con <code>dotnet build</code>, <code>dotnet test</code> y <code>dotnet run</code> desde una carpeta independiente.</p>
+
+    </main>
+  </div>
+</div>
+</body>
+</html>

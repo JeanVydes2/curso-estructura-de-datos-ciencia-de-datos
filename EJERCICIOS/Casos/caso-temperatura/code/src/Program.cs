@@ -8,57 +8,49 @@ public static class Program
 {
     public static async Task Main()
     {
-        DataLocalService dataService = new();
-        List<ColdChainRecord> history =
-            await dataService.GetDataLocalAsync<ColdChainRecord>("cold-chain-history.json");
-        List<ReceivedTemperatureRecord> received =
-            await dataService.GetDataLocalAsync<ReceivedTemperatureRecord>("received-temperature-records.json");
+        DataLocalService service = new();
+
+        List<ColdChainRecord> historial = await service.GetDataLocalAsync<ColdChainRecord>("cold-chain-history.json");
+        List<ReceivedTemperatureRecord> recibidos = await service.GetDataLocalAsync<ReceivedTemperatureRecord>("received-temperature-records.json");
 
         BinarySearchTree<int, ColdChainRecord> tree = new(record => record.RecordNumber);
 
-        foreach (ColdChainRecord record in history)
+        foreach (ColdChainRecord registro in historial)
         {
-            // record.Condition = GetCondition(record.TemperatureCelsius);
-            tree.Insert(record);
+            tree.Insert(registro);
         }
 
-        Console.WriteLine("Initial metrics:");
+        ImprimirResumen(tree);
 
-        PrintSummary(tree);
+        ImprimirBusqueda(tree, 4500);
+        ImprimirBusqueda(tree, 9999);
 
-        PrintSearch(tree, 4500);
-        PrintSearch(tree, 9999);
 
-        InsertReceived(tree, received);
+        InsertReceived(tree, recibidos);
 
-        Console.WriteLine("Metrics after inserting received records:");
-
-        PrintSummary(tree);
+        ImprimirResumen(tree);
     }
 
-    private static void InsertReceived(
-        BinarySearchTree<int, ColdChainRecord> tree,
-        List<ReceivedTemperatureRecord> received)
+    private static void ImprimirResumen(BinarySearchTree<int, ColdChainRecord> tree) {
+        Console.WriteLine($"Registros {tree.Tree.CountNodes()}");
+        Console.WriteLine($"Altura {tree.Tree.Height()}");
+        Console.WriteLine($"Hojas {tree.Tree.CountLeaves()}");
+        Console.WriteLine($"Nodo Internos {tree.Tree.CountInternal()}");
+        Console.WriteLine($"Inorden {string.Join(", ", tree.Tree.Inorder().Select(nodo => nodo.Value.RecordNumber))}");
+        Console.WriteLine($"Preorden {string.Join(", ", tree.Tree.Preorder().Select(nodo => nodo.Value.RecordNumber))}");
+        Console.WriteLine($"Postorden {string.Join(", ", tree.Tree.Postorder().Select(nodo => nodo.Value.RecordNumber))}");
+        Console.WriteLine($"Level order {string.Join(", ", tree.Tree.LevelOrder().Select(nodo => nodo.Value.RecordNumber))}");
+        Console.WriteLine($"Valido {tree.IsValid()}");
+    }
+
+    private static void ImprimirBusqueda(BinarySearchTree<int, ColdChainRecord> tree, int registro)
     {
-        Console.WriteLine("Received temperature records:");
+        List<BinaryNode<ColdChainRecord>> ruta = tree.SearchPath(registro);
+        bool encontrado = ruta.Count > 0 && ruta.Last().Value.RecordNumber == registro;
 
-        foreach (ReceivedTemperatureRecord receivedRecord in received)
-        {
-            ColdChainRecord record = new()
-            {
-                RecordNumber = receivedRecord.RecordNumber,
-                ProductCode = receivedRecord.ProductCode,
-                StorageCenter = receivedRecord.StorageCenter,
-                TemperatureCelsius = receivedRecord.TemperatureCelsius,
-                TransportStage = receivedRecord.TransportStage,
-                Condition = GetCondition(receivedRecord.TemperatureCelsius)
-            };
+        Console.WriteLine($"Busqueda {registro}: {(encontrado ? "Encontrado" : "No encontrado")}");
+        Console.WriteLine($"Ruta: {string.Join(", ", ruta.Select(node => node.Value.RecordNumber))}");
 
-            bool inserted = tree.Insert(record);
-            Console.WriteLine(
-                $"{record.RecordNumber}: condition={record.Condition}, "
-                + (inserted ? "inserted" : "rejected because of duplicate"));
-        }
     }
 
     private static string GetCondition(decimal temperature)
@@ -67,7 +59,7 @@ public static class Program
         {
             return "Critical";
         }
-
+        
         if (temperature < 2 || temperature > 6)
         {
             return "Review";
@@ -76,25 +68,28 @@ public static class Program
         return "Normal";
     }
 
-    private static void PrintSummary(BinarySearchTree<int, ColdChainRecord> tree)
-    {
-        Console.WriteLine($"Records in tree: {tree.Tree.CountNodes()}");
-        Console.WriteLine($"height: {tree.Tree.Height()}");
-        Console.WriteLine($"leaves: {tree.Tree.CountLeaves()}");
-        Console.WriteLine($"internal nodes: {tree.Tree.CountInternal()}");
-        Console.WriteLine($"Inorder: {string.Join(", ", tree.Tree.Inorder().Select(node => node.Value.RecordNumber))}");
-        Console.WriteLine($"Preorder: {string.Join(", ", tree.Tree.Preorder().Select(node => node.Value.RecordNumber))}");
-        Console.WriteLine($"Postorder: {string.Join(", ", tree.Tree.Postorder().Select(node => node.Value.RecordNumber))}");
-        Console.WriteLine($"Level order: {string.Join(", ", tree.Tree.LevelOrder().Select(node => node.Value.RecordNumber))}");
-        Console.WriteLine($"valid: {tree.IsValid()}");
-    }
 
-    private static void PrintSearch(BinarySearchTree<int, ColdChainRecord> tree, int recordNumber)
+    private static void InsertReceived(
+        BinarySearchTree<int, ColdChainRecord> arbol,
+        List<ReceivedTemperatureRecord> recibidos
+    )
     {
-        List<BinaryNode<ColdChainRecord>> path = tree.SearchPath(recordNumber);
-        bool found = path.Count > 0 && path.Last().Value.RecordNumber == recordNumber;
+        foreach (ReceivedTemperatureRecord receivedRecord in recibidos)
+        {
+            ColdChainRecord record = new()
+            {
+                RecordNumber = receivedRecord.RecordNumber,
+                ProductCode = receivedRecord.ProductCode,
+                StorageCenter = receivedRecord.StorageCenter,
+                TemperatureCelsius = receivedRecord.TemperatureCelsius,
+                Condition = GetCondition(receivedRecord.TemperatureCelsius)
+            };
 
-        Console.WriteLine($"Search {recordNumber}: {(found ? "found" : "not found")}");
-        Console.WriteLine($"Path {recordNumber}: {string.Join(" -> ", path.Select(node => node.Value.RecordNumber))}");
+            bool inserted = arbol.Insert(record);
+            Console.WriteLine(
+                $"{record.RecordNumber}: condition={record.Condition}, "
+                + (inserted ? "inserted" : "rechazo por duplicado")
+            );
+        }
     }
 }

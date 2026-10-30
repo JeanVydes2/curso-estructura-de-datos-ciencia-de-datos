@@ -1,0 +1,12 @@
+[
+  {"OrderId":4500,"ProductCode":"ELEC-A","StoreCode":"Central Store","EstimatedDeliveryDays":3,"DeliveringDays":5,"Stage":"Processing"},
+  {"OrderId":2300,"ProductCode":"ROPA-B","StoreCode":"North Store","EstimatedDeliveryDays":5,"DeliveringDays":4,"Stage":"Shipping"},
+  {"OrderId":6700,"ProductCode":"HOGAR-C","StoreCode":"South Store","EstimatedDeliveryDays":4,"DeliveringDays":4,"Stage":"Processing"},
+  {"OrderId":1200,"ProductCode":"ELEC-D","StoreCode":"Central Store","EstimatedDeliveryDays":2,"DeliveringDays":6,"Stage":"Shipping"},
+  {"OrderId":3100,"ProductCode":"ROPA-E","StoreCode":"North Store","EstimatedDeliveryDays":6,"DeliveringDays":6,"Stage":"Processing"},
+  {"OrderId":5400,"ProductCode":"HOGAR-F","StoreCode":"South Store","EstimatedDeliveryDays":3,"DeliveringDays":1,"Stage":"Shipping"},
+  {"OrderId":800,"ProductCode":"ELEC-G","StoreCode":"Central Store","EstimatedDeliveryDays":7,"DeliveringDays":9,"Stage":"Processing"},
+  {"OrderId":5800,"ProductCode":"ROPA-H","StoreCode":"South Store","EstimatedDeliveryDays":2,"DeliveringDays":3,"Stage":"Shipping"},
+  {"OrderId":7600,"ProductCode":"HOGAR-I","StoreCode":"East Store","EstimatedDeliveryDays":5,"DeliveringDays":2,"Stage":"Processing"},
+  {"OrderId":1500,"ProductCode":"ROPA-J","StoreCode":"North Store","EstimatedDeliveryDays":4,"DeliveringDays":8,"Stage":"Shipping"}
+]

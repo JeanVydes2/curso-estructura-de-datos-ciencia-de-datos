@@ -1,0 +1,9 @@
+[
+  {"Order":1,"Lot":null},
+  {"Order":2,"Lot":null},
+  {"Order":3,"Lot":{"Code":"L08","Product":"Harina de trigo 1 kg","DaysToExpire":30,"ArrivalOrder":8}},
+  {"Order":4,"Lot":{"Code":"L09","Product":"Pollo fresco 1 kg","DaysToExpire":2,"ArrivalOrder":9}},
+  {"Order":5,"Lot":null},
+  {"Order":6,"Lot":null},
+  {"Order":7,"Lot":null}
+]

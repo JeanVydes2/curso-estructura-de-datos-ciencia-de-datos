@@ -1,0 +1,9 @@
+[
+  {"Code":"L01","Product":"Leche entera 1 L","DaysToExpire":9,"ArrivalOrder":1},
+  {"Code":"L02","Product":"Yogur natural 500 g","DaysToExpire":4,"ArrivalOrder":2},
+  {"Code":"L03","Product":"Jugo de naranja 1 L","DaysToExpire":12,"ArrivalOrder":3},
+  {"Code":"L04","Product":"Queso fresco 250 g","DaysToExpire":3,"ArrivalOrder":4},
+  {"Code":"L05","Product":"Mantequilla 250 g","DaysToExpire":4,"ArrivalOrder":5},
+  {"Code":"L06","Product":"Conserva de tomate 400 g","DaysToExpire":20,"ArrivalOrder":6},
+  {"Code":"L07","Product":"Crema de leche 200 ml","DaysToExpire":1,"ArrivalOrder":7}
+]
